@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Environment
+.env
+!.env.example
+
+# Node
+node_modules/
+npm-debug.log
+frontend/dist/
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Testing
+.pytest_cache/
+
+# Bandit
+.bandit
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store

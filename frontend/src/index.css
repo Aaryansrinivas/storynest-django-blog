@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: 'DM Sans', system-ui, sans-serif; }
+  body { @apply bg-ink-50 text-ink-900; }
+  
+  ::selection { @apply bg-amber-400/30; }
+  
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-ink-100; }
+  ::-webkit-scrollbar-thumb { @apply bg-ink-300 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-ink-400; }
+}
+
+@layer components {
+  .prose-blog {
+    @apply text-ink-800 leading-relaxed;
+  }
+  .prose-blog h1, .prose-blog h2, .prose-blog h3 {
+    @apply font-display text-ink-900 font-medium;
+  }
+  .prose-blog p { @apply mb-4; }
+  .prose-blog h2 { @apply text-2xl mt-8 mb-3; }
+  .prose-blog h3 { @apply text-xl mt-6 mb-2; }
+  .prose-blog a { @apply text-amber-600 underline underline-offset-2; }
+  .prose-blog blockquote {
+    @apply border-l-4 border-amber-400 pl-4 italic text-ink-600 my-6;
+  }
+  .prose-blog code {
+    @apply bg-ink-100 text-ink-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose-blog pre {
+    @apply bg-ink-900 text-ink-100 p-4 rounded-xl overflow-x-auto my-6;
+  }
+  .prose-blog ul { @apply list-disc pl-6 mb-4 space-y-1; }
+  .prose-blog ol { @apply list-decimal pl-6 mb-4 space-y-1; }
+  .prose-blog img { @apply rounded-xl my-6 w-full object-cover; }
+
+  .btn-primary {
+    @apply bg-ink-900 text-ink-50 px-5 py-2.5 rounded-xl font-medium text-sm
+           hover:bg-ink-800 active:scale-[0.98] transition-all duration-150;
+  }
+  .btn-ghost {
+    @apply px-4 py-2 rounded-xl text-sm text-ink-600 hover:bg-ink-100
+           active:scale-[0.98] transition-all duration-150;
+  }
+  .btn-outline {
+    @apply border border-ink-200 px-4 py-2 rounded-xl text-sm text-ink-700
+           hover:bg-ink-100 active:scale-[0.98] transition-all duration-150;
+  }
+  .input-field {
+    @apply w-full border border-ink-200 rounded-xl px-4 py-3 text-sm bg-white
+           placeholder-ink-400 focus:outline-none focus:ring-2 focus:ring-amber-400/40
+           focus:border-amber-400 transition-all;
+  }
+  .card {
+    @apply bg-white border border-ink-100 rounded-2xl overflow-hidden
+           hover:border-ink-200 hover:shadow-sm transition-all duration-200;
+  }
+  .tag-chip {
+    @apply inline-block px-3 py-1 text-xs rounded-full bg-ink-100 text-ink-600
+           hover:bg-amber-100 hover:text-amber-700 transition-colors cursor-pointer;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.4s ease forwards; }
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e8e5de 25%, #f5f4f0 50%, #e8e5de 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
