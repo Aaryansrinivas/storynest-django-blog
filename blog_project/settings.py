@@ -2,6 +2,7 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 from datetime import timedelta
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -221,11 +222,17 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = FRONTEND_URL + '/oauth/callback'
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = FRONTEND_URL + '/oauth/callback'
 
 # ─── Security (production) ───────────────────────────────────────────────────
-if not DEBUG:
+# Enable HTTPS security settings only in production,
+# never during automated test runs.
+
+if not DEBUG and "test" not in sys.argv:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
-
+print("DEBUG =", DEBUG)
+print("ARGV =", sys.argv)
