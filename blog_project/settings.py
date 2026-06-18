@@ -101,6 +101,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # ─── Auth & Password ─────────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
@@ -151,7 +152,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/hour',
-        'user': '1000/hour',
+        'user': '100/hour',
 
         'register': '5/hour',
         'login': '1000/hour',
@@ -181,6 +182,8 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://storynest-murex.vercel.app",
+
 ]
 
 # ─── Cloudinary (production media) ───────────────────────────────────────────
@@ -214,7 +217,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = not DEBUG
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # Ensure HTTPS redirect for OAuth2 in production
 
 # Frontend URL for OAuth redirect
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173')
@@ -228,7 +231,11 @@ SOCIAL_AUTH_NEW_USER_REDIRECT_URL = FRONTEND_URL + '/oauth/callback'
 if not DEBUG and "test" not in sys.argv:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "None"
+
     CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = "None"
+
 
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
