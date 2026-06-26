@@ -117,14 +117,42 @@ USE_I18N = True
 USE_TZ = True
 
 # ─── Static & Media ──────────────────────────────────────────────────────────
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# ─── Cloudinary Configuration ────────────────────────────────────────────────
+import cloudinary
 
+CLOUDINARY_CLOUD_NAME = config("CLOUDINARY_CLOUD_NAME", default=None)
+CLOUDINARY_API_KEY = config("CLOUDINARY_API_KEY", default=None)
+CLOUDINARY_API_SECRET = config("CLOUDINARY_API_SECRET", default=None)
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
+if all([CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET]):
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
+        secure=True,
+    )
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 # ─── Django REST Framework ────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -184,23 +212,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://storynest-murex.vercel.app",
 
 ]
-
-# ─── Cloudinary (production media) ───────────────────────────────────────────
-import cloudinary
-
-CLOUDINARY_CLOUD_NAME = config("CLOUDINARY_CLOUD_NAME", default="")
-CLOUDINARY_API_KEY = config("CLOUDINARY_API_KEY", default="")
-CLOUDINARY_API_SECRET = config("CLOUDINARY_API_SECRET", default="")
-
-if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
-    cloudinary.config(
-        cloud_name=CLOUDINARY_CLOUD_NAME,
-        api_key=CLOUDINARY_API_KEY,
-        api_secret=CLOUDINARY_API_SECRET,
-        secure=True,
-    )
-
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # ─── Social Auth / OAuth2 ─────────────────────────────────────────────────────
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY', default='')
