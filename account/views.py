@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth import get_user
 from rest_framework.authentication import SessionAuthentication
 
 from .serializers import RegisterSerializer, UserSerializer, UpdateProfileSerializer
@@ -101,9 +102,16 @@ class OAuthTokenView(APIView):
     throttle_classes = [OAuthTokenThrottle]        # ← 20 per hour per IP
 
     def post(self, request):
-        user = request.user
+        print("request.user:", request.user)
+        print("is_authenticated:", request.user.is_authenticated)
+        print("session_key:", request.session.session_key)
+        print("_auth_user_id:", request.session.get("_auth_user_id"))
+        print("_auth_user_backend:", request.session.get("_auth_user_backend"))
 
-        if not user or not user.is_authenticated:
+        user = get_user(request)
+        print("get_user():", user)
+
+        if not user.is_authenticated:
             return Response(
                 {'detail': 'Not authenticated via OAuth. Complete the OAuth flow first.'},
                 status=status.HTTP_401_UNAUTHORIZED,
