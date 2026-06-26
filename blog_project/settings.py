@@ -121,8 +121,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -155,7 +154,7 @@ REST_FRAMEWORK = {
         'user': '100/hour',
 
         'register': '5/hour',
-        'login': '1000/hour',
+        'login': '100/hour',
         'oauth_token': '20/hour',
 
         'post_create': '20/day',
@@ -187,9 +186,16 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # ─── Cloudinary (production media) ───────────────────────────────────────────
-CLOUDINARY_URL = config('CLOUDINARY_URL', default=None)
-if CLOUDINARY_URL:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+import cloudinary
+
+cloudinary.config(
+    cloud_name=config("CLOUDINARY_CLOUD_NAME"),
+    api_key=config("CLOUDINARY_API_KEY"),
+    api_secret=config("CLOUDINARY_API_SECRET"),
+    secure=True,
+)
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # ─── Social Auth / OAuth2 ─────────────────────────────────────────────────────
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY', default='')
